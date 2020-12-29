@@ -5,7 +5,7 @@ typedef struct rule {
 };
 
 struct rule* add_fact(fact, *rule){
-    int* rule_transit, rule_cc1;
+    int *rule_transit, *rule_cc1;
     struct rule new_fact;
     if (*rule.next==NULL){
         return 0;
@@ -19,7 +19,7 @@ struct rule* add_fact(fact, *rule){
         
         if (rule.ccl==1){
             *rule_transit.next=&new_fact;
-            new_fact.next=rule_ccl;
+            *new_fact.next=&rule_ccl;
         } else {
             *rule.next= &new_fact;
         }
@@ -41,26 +41,24 @@ int test_fact(fact, *rule){
 }
 
 int remove_fact(fact, *rule){
-    struct rule* rule_trst=rule;
+    int *rule_trst,*rule_ccl;
     if (rule.next==NULL){
         return 0;
     } else {
         while (rule.next!=NULL){
+          rule_transit=rule;
           if (strcmp(rule.fact,fact)==0){
               break;
           }
-          rule_trst=rule_trst->next;
-          rule=rule->next;
+          rule=*rule.next;
         }
-        rule_trst=rule_trst->next;
-        if (rule.next!=NULL){
-            return 1;
+        rule_ccl=rule;
+        if (rule.next==NULL){
+            return 0;
+        } else {
+            *rule_transit.next=&rule_ccl;   
         }
-        while (rule_trst->next!=NULL){
-        rule=rule_trst;
-        }
-        rule=rule->next;
-        rule=NULL;
+        
     }
 }
 
