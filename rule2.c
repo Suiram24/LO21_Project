@@ -49,14 +49,15 @@ int remove_fact(fact, *rule){
           rule_transit=rule;
           if (strcmp(*rule.fact,fact)==0){
               break;
-          }
+        ! }
           rule=*rule.next;
         }
         rule_ccl=rule;
-        if (rule.next==NULL){
+        if ((*rule.next==NULL) && (strcmp(*rule.fact,fact)!=0)){
             return 0;
         } else {
-            *rule_transit.next=&rule_ccl;   
+            *rule_transit.next=&rule_ccl;
+            return 1;
         }
         
     }
