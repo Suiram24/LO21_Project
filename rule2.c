@@ -42,12 +42,12 @@ int test_fact(fact, *rule){
 
 int remove_fact(fact, *rule){
     int *rule_trst,*rule_ccl;
-    if (rule.next==NULL){
+    if (*rule.next==NULL){
         return 0;
     } else {
-        while (rule.next!=NULL){
+        while (*rule.next!=NULL){
           rule_transit=rule;
-          if (strcmp(rule.fact,fact)==0){
+          if (strcmp(*rule.fact,fact)==0){
               break;
           }
           rule=*rule.next;
