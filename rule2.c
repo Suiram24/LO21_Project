@@ -8,15 +8,15 @@ struct rule* add_fact(fact, *rule){
     if (rule.next==NULL){
         return 0;
     } else {
-        struct rule* rule_transit;
+        struct rule *rule_transit,*rule_ccl;
         while (rule.next !=NULL){
+            rule_transit=rule;
             rule = rule.next;
         }
+        rule_ccl=rule;
         if (rule.ccl==1){
-            rule_transit.next=*rule;
-            rule.next=*fact;
-            rule=rule.next;
-            rule.next=*rule_transit;
+            *rule_transit.next=fact;
+            *rule.next=rule_ccl;
         } else {
             rule.next=*fact;
         }
