@@ -53,7 +53,7 @@ int remove_fact(fact, *rule){
           rule=*rule.next;
         }
         rule_ccl=rule;
-        if ((*rule.next==NULL) && (strcmp(*rule.fact,fact)!=0)){
+        if ((*rule.next==NULL) && ((strcmp(*rule.fact,fact)!=0) || (*rule.ccl==1)){
             return 0;
         } else {
             *rule_transit.next=&rule_ccl;
