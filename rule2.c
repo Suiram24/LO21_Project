@@ -5,20 +5,21 @@ typedef struct rule {
 };
 
 struct rule* add_fact(fact, *rule){
-    if (rule.next==NULL){
+    int* rule_transit, rule_cc1;
+    struct rule fact;
+    if (*rule.next==NULL){
         return 0;
     } else {
-        struct rule *rule_transit,*rule_ccl;
-        while (rule.next !=NULL){
+        while (*rule.next !=NULL){
             rule_transit=rule;
-            rule = rule.next;
+            rule = *rule.next;
         }
         rule_ccl=rule;
         if (rule.ccl==1){
-            *rule_transit.next=fact;
-            *rule.next=rule_ccl;
+            *rule_transit.next=&fact;
+            fact.next=rule_ccl;
         } else {
-            rule.next=*fact;
+            *rule.next= &fact;
         }
         return 1;
     }
