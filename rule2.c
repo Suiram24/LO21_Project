@@ -6,7 +6,7 @@ typedef struct rule {
 
 struct rule* add_fact(fact, *rule){
     int* rule_transit, rule_cc1;
-    struct rule fact;
+    struct rule new_fact;
     if (*rule.next==NULL){
         return 0;
     } else {
@@ -15,11 +15,13 @@ struct rule* add_fact(fact, *rule){
             rule = *rule.next;
         }
         rule_ccl=rule;
+        new_fact.fact=fact;
+        
         if (rule.ccl==1){
-            *rule_transit.next=&fact;
-            fact.next=rule_ccl;
+            *rule_transit.next=&new_fact;
+            new_fact.next=rule_ccl;
         } else {
-            *rule.next= &fact;
+            *rule.next= &new_fact;
         }
         return 1;
     }
