@@ -17,6 +17,9 @@ int create_ccl(*fact, *rule){
     strcpy(*ccl.fact, *fact);
     *ccl.ccl = 1;
     *rule.next = ccl;
+    return 0;
+  }else {
+    return 1;
   }
   
 }
