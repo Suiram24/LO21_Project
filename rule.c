@@ -1,3 +1,7 @@
+
+#include <string.h>
+#include <stdio.h>
+
 *rule new_rule(){
   struct rule newRule;
 
@@ -8,10 +12,13 @@ int create_ccl(*fact, *rule){
   while (*rule.next != NULL) {
     rule = *rule.next;
   }
-  *int ccl = newrule();
-  *ccl.fact = *fact;
-  *ccl.ccl = 1;
-  *rule.next = ccl;
+  if(*rule.ccl == 0){
+    rule *ccl = newrule();
+    strcpy(*ccl.fact, *fact);
+    *ccl.ccl = 1;
+    *rule.next = ccl;
+  }
+  
 }
 
 int test_empty_facts(*rule){
