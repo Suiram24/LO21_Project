@@ -58,11 +58,12 @@ int add_fact_to_list(*char fact, *facts_t factList){
     add_fact_to_list(*pFacts.fact, &resultFacts);
     pFacts = *pFacts.next;
   }
-  
+
   while (pKB != NULL) {
     if(is_rule_true(*pKB.rule, &resultFacts)){
       add_fact_to_list(rule_ccl(*pkb.rule),&resultFacts);
     }
+    pKB = *pKB.next;
   }
   return &resultFacts;
 }
