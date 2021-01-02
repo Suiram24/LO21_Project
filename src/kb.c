@@ -5,12 +5,12 @@
 
 
 kb* new_kb(){
-  struct kb newkb;
+  kb_t newkb;
   return &newkb;
 }
 
-int addrule(*rule, *kb){
-  kb *newrule;
+int addrule(*rule_t rule, *kb_t kb){
+  kb_t *newrule;
   newrule = new_kb();
   while(*kb.next!=NULL){
     kb = *kb.next;
@@ -20,6 +20,11 @@ int addrule(*rule, *kb){
   return 0;
 }
 
-*rule kb_first_rule(*kb){
-  return *(*kb.next).rule;
+*rule_t kb_first_rule(*kb_t kb){
+  if(*kb.next == NULL){
+    return NULL;
+  }else {
+      return *(*kb.next).rule;
+  }
+
 }

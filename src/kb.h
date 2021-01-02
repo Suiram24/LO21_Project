@@ -5,15 +5,18 @@
 #include <stdio.h>
 
 
-typedef struct kb {
-  rule* rule;
-  struct kb* next;
+typedef struct kb_t {
+  rule_t* rule;
+  struct kb_t* next;
 };
 
-kb* new_kb();
+//create a new void knowledge base and return the pointer to it
+kb_t* new_kb();
 
-int addrule(*rule, *kb)
+//add a rule to an existing knowledge base
+int addrule(*rule_t rule, *kb_t kb);
 
-*rule kb_first_rule(*kb);
+//return a pointer to the first rule of a knowledge base
+*rule_t kb_first_rule(*kb_t kb);
 
 #endif

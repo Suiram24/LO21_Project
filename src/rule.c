@@ -3,15 +3,15 @@
 #include <stdio.h>
 #include "rule.h"
 
-*rule new_rule(){
-  struct rule newRule;
+*rule_t new_rule(){
+  struct rule_t newRule;
 
   return &newRule;
 }
 
-int add_fact(*fact, *rule){
-  rule *rule_transit, *rule_cc1;
-  struct rule new_fact;
+int add_fact(*char fact, *rule_t rule){
+  rule_t *rule_transit, *rule_cc1;
+  struct rule_t new_fact;
   rule_transit=rule;
 
       while (*rule.next !=NULL){
@@ -31,12 +31,12 @@ int add_fact(*fact, *rule){
 
 }
 
-int create_ccl(*fact, *rule){
+int create_ccl(*char fact, *rule_t rule){
   while (*rule.next != NULL) {
     rule = *rule.next;
   }
   if(*rule.ccl == 0){
-    rule *ccl = newrule();
+    rule_t *ccl = newrule();
     strcpy(*ccl.fact, *fact);
     *ccl.ccl = 1;
     *rule.next = ccl;
@@ -47,7 +47,7 @@ int create_ccl(*fact, *rule){
 
 }
 
-int test_empty_facts(*rule){
+int test_empty_facts(*rule_t rule){
   if(*rule.next == NULL){
     return 1;
   }else if (*(*rule.next).ccl == 1){
@@ -57,7 +57,7 @@ int test_empty_facts(*rule){
   }
 }
 
-int test_fact(*fact, *rule){
+int test_fact(*char fact, *rule_t rule){
   while (*rule.next!=NULL){
       if (strcmp(*rule.fact,fact)==0){
           return 1;
@@ -71,8 +71,8 @@ int test_fact(*fact, *rule){
   }
 }
 
-int remove_fact(*fact, *rule){
-  int *rule_trst,*rule_ccl;
+int remove_fact(*char fact, *rule_t rule){
+  rule_t *rule_transit,*rule_ccl;
   if (test_empty_facts(rule)==1){
       return 0;
   } else {
@@ -89,7 +89,7 @@ int remove_fact(*fact, *rule){
   }
 }
 
-*char rule_head_fact(*rule){
+*char rule_head_fact(*rule_t rule){
   if (test-empty-facts(rule)==1){
       return NULL;
   } else {
@@ -97,7 +97,7 @@ int remove_fact(*fact, *rule){
   }
 }
 
-*char rule_ccl(*rule){
+*char rule_ccl(*rule_t rule){
   while (*rule.next != NULL) {
     rule = *rule.next;
   }
