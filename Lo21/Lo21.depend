@@ -1,0 +1,41 @@
+# depslib dependency file v1.0
+1609714962 source:d:\dev\git\lop21_project\lo21_project\src\ie.c
+	<string.h>
+	<stdio.h>
+	"kb.h"
+	"rule.h"
+	"ie.h"
+
+1609714147 d:\dev\git\lop21_project\lo21_project\src\kb.h
+	<string.h>
+	<stdio.h>
+	"rule.h"
+
+1609713946 d:\dev\git\lop21_project\lo21_project\src\rule.h
+	<string.h>
+	<stdio.h>
+
+1609714021 d:\dev\git\lop21_project\lo21_project\src\ie.h
+	<string.h>
+	<stdio.h>
+	"rule.h"
+	"kb.h"
+
+1609715047 source:d:\dev\git\lop21_project\lo21_project\src\kb.c
+	<string.h>
+	<stdio.h>
+	"kb.h"
+	"rule.h"
+
+1609717441 source:d:\dev\git\lop21_project\lo21_project\src\main.c
+	<string.h>
+	<stdio.h>
+	"kb.h"
+	"rule.h"
+	"ie.h"
+
+1609717965 source:d:\dev\git\lop21_project\lo21_project\src\rule.c
+	<string.h>
+	<stdio.h>
+	"rule.h"
+
