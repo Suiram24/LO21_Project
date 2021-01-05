@@ -1,0 +1,307 @@
+\documentclass{article}
+\usepackage[frenchb]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{mathtools}
+\usepackage{arevmath}
+\usepackage{amsfonts}
+\usepackage{slantsc}
+\usepackage{xcolor}
+\usepackage[a4paper, margin=1in]{geometry}
+
+\usepackage[linesnumbered, french]{algorithm2e}
+\SetKwInput{Data}{Donn\'ees}
+\SetKwInput{Result}{R\'esultat}
+\SetKwInput{Vars}{Variables}
+\SetKwInput{Assertion}{Assertion}
+\SetKwIF{If}{ElseIf}{Else}{Si}{alors}{Sinon si}{Sinon}{FinSi}
+\SetKwFor{While}{Tant que}{faire}{Fin TantQue}
+\SetKwBlock{Begin}{D\'ebut}{Fin}
+\SetKwRepeat{Repeat}{Faire}{Tant que}
+\DontPrintSemicolon
+\SetAlgoLined
+
+\RestyleAlgo{boxruled}
+
+\newcommand{\Assign}[2]{#1 $\; \longleftarrow \;$ #2}
+\newcommand{\Arg}[2]{\hspace{0.2em}#1\hspace{0.05em}: #2}
+\newcommand{\Child}[2]{#2(#1)}
+\newcommand{\Null}[0]{\textsc{null}\hspace{4pt}}
+\newcommand{\Et}[2]{#1\hspace{2pt}\textnormal{\textbf{et}}\hspace{2.5pt}#2}
+\newcommand{\Not}[1]{\textnormal{\textbf{non}}(#1)}
+
+\begin{document}
+
+\title{LO21}
+\author{Marius Bozane\\
+Louis Esteban
+}
+\date {Automne 2020}
+\maketitle
+
+\begin{abstract}
+	Pour notre projet de LO21 nous devions réaliser un système expert composé de bases de 	connaissances, de règles et d'un moteur d'inférence.
+\end{abstract}
+
+\newpage
+
+\section{Règles}
+
+\subsection{Création de règle}
+On commmence par créer une nouvelle règle de type pointeur\\
+\begin{algorithm}[H]
+
+\Vars{\Arg{$R$}{La nouvelle Règle}}
+
+\Result{\Arg{$R$}{La Règle à retourner}}
+
+\Begin({RègleVide()}){
+	\Assign{$R$}{\textit{règle\_vide}}
+}
+\caption{RègleVide\label{RV}}
+
+\end{algorithm}
+
+\subsection{Ajout de Prémisses}
+
+\begin{algorithm}[H]
+
+\Vars{\\
+- \Arg{$P$}{Prémisse à rajouter}\\
+- \Arg{$R$}{Règle dont on veut rajouter une prémisse}\\
+- \Arg{$R'$}{Stockage du dernier objet d'une règle}\\
+- \Arg{$T$}{Stockage de l'avant-dernier objet de la règle}\\
+- \Arg{$NP$}{L'adresse de la nouvelle prémisse}}
+
+\Data{\Arg{$R$}{Règle}}
+
+\Result{\Arg{$R$}{Règle}}
+
+\Begin({CréerConclusion ($C$,$R$)}){
+
+\While{Suivant($R$) $\neq$ indéfini}{
+	
+	\Assign{$T$}{Suivant($R$)}\\
+	\Assign{$R$}{Suivant($R$)}
+	
+}
+\Assign{Conclusion($R'$)}{$R$}\\
+\Assign{Fait($NP$)}{$R$}
+
+\If{Conclusion($R'$)=1}{
+	\Assign{Suivant($T$)}{$NP$}\\
+	\Assign{Suivant($NP$)}{$R'$}
+} \Else {
+	\Assign{Suivant($R$)}{$NP$}
+}
+}
+
+\caption{AjoutPrémisse\label{AP}}
+
+\end{algorithm}
+
+\subsection{Créer une conclusion}
+
+\begin{algorithm}[H]
+\Vars{\\
+
+- \Arg{$C$}{Conclusion à rajouter}\\
+- \Arg{$R$}{Règle dont on veut rajouter une conclusion}\\
+- \Arg{$R'$}{Règle de transit}}
+
+\Data{\Arg{$R$}{Règle}}
+\Result{\Arg{$R$}{La règle auquelle on veut rajouter une conclusion}}
+
+\Begin({CréerConclusion ($C$,$R$)}){
+
+\While{Suivant($R$) $\neq$ indéfini}{
+
+	\Assign{$R$}{Suivant($R$)}
+	
+}
+\If{Conclusion($R$) = 0}{
+
+	\Assign{$R'$}{\textit{RègleVide()}}\\
+	\Assign{Fait($R'$)}{$C$}\\
+	\Assign {Conclusion($R'$)}{1}\\
+	\Assign{Suivant($R$)}{$R'$}\\
+	\Assign{Résultat}{Vrai}
+	
+}
+\Else {
+	\Assign{Résultat}{Faux}
+}
+}
+\caption{CréerConclusion\label{CCL}}
+
+\end{algorithm}
+
+\subsection{Test 1: Une prémisse appartient à une règle}
+
+\begin{algorithm}[H]
+
+\Vars{\\
+- \Arg{$R$}{Règle}\\
+- \Arg{$P$}{Prémisse que l'on veut tester}}
+\Data{\Arg{$R$}{Règle}}
+\Result{\Arg{$R$}{Règle}}
+
+\Begin({TestPrémisse ($P$,$R$)}){
+
+\While{Suivant($R$) $\neq$ indéfini}{
+
+	\If{ComparerCaractère(Fact($R$),$P$)=0}{
+	
+		\Assign{Résultat}{Vrai}
+		
+	}
+	
+	\Assign{$R$}{Suivant($R$)}
+	
+}
+
+\If{ \Et (Conlusion($R$)=0) (ComparerCaractère(Fact($R$),$P$)=0)}{
+
+	\Assign{Résultat}{Vrai}
+	
+} \Else {
+	\Assign{Résultat}{Faux}
+}
+
+}
+
+\caption{TestPrémisse\label{TP}}
+
+\end{algorithm}
+
+\subsection{Supprimer une prémisse d'une règle}
+
+\begin{algorithm}[H]
+
+\Vars{\\
+- \Arg{$P$}{Prémisse à rajouter}\\
+- \Arg{$R$}{Règle dont on veut rajouter une prémisse}\\
+- \Arg{$R'$}{Stockage du dernier objet d'une règle}\\
+- \Arg{$T$}{Stockage de l'avant-dernier objet de la règle}\\
+
+\Data{\Arg{$R$}{Règle}}
+
+\Result{\Arg{$R$}{Règle}}
+
+\Begin({SupprimerPrémisse ($P$,$R$)}){
+
+\If {\textit{PrémisseVide($R$}=1}{
+
+	\Assign{Résultat}{Faux}
+	
+}\Else{
+
+	\While{$R$ $\neq$ indéfini}{
+	
+	\Assign{$T$}{$R$}\\
+	
+	\If{\Et(ComparerCaractère(Fait($R$),$P$)=1) (Conclusion($R$)=1)}{
+	
+		\Assign{Suivant($T$)}{Suivant($R$)}\\
+		Libérer($R$)\\
+		\Assign{Résultat}{Vrai}
+	}
+	\Assign{$R$}{Suivant($R$)}
+	}
+	\Assign{Résultat}{Faux}
+}
+
+}
+
+}
+
+\caption{SupprimerPrémisse\label{SP}}
+
+\end{algorithm}
+
+\subsection{Test 2: Prémisse vide d'une règle}
+
+\begin{algorithm}[H]
+
+\Vars{\Arg{$R$}{Règle que l'on veut tester}}
+\Data{\Arg{$R$}{la Règle en question}}
+\Result{\Arg{Résultat}{Précise si la règle contient des prémisses ou non}}
+
+\Begin({PrémisseVide ($R$)}){
+
+	\If{Suivant($R$) $\neq$ indéfini}{
+	\Assign{Résultat}{Faux}
+	}
+	
+	\ElseIf {Conclusion(Suivant($R$))=1}{
+	\Assign{Résultat}{Vrai}	
+	}
+	
+	\Else {
+	\Assign{Résultat}{Faux}
+	}
+}
+\caption{PrémisseVide\label{PV}}
+
+\end{algorithm}
+
+\subsection{Accéder à la première prémisse d'une règle}
+
+\begin{algorithm}[H]
+
+\Vars{\Arg{$R$}{Règle dont on veut voir la prémisse}}
+\Data{\Arg{$R$}{la Règle en question}}
+\Result{\Arg{$P$}{Renvoit la première prémisse}}
+
+\Begin({PremièrePrémisse ($R$)}){
+
+	\While{Suivant($R$) $\neq$ indéfini}{
+
+	\Assign{$R$}{Suivant($R$)}
+	}
+	\If{Conclusion($R$)=1}{
+		Retourner (Fait($R$))\\
+	}
+		Retourner indéfini\\
+}
+
+
+\caption{PremièrePrémisse\label{PP}}
+
+\end{algorithm}
+
+\subsection{Accéder à la conclusion d'une règle}
+
+\begin{algorithm}[H]
+
+\Vars{\Arg{$R$}{Règle dont on veut la conclusion}}
+
+\Data{\Arg{$R$}{la Règle en question}}
+
+\Result{\Arg{$P$}{La Conclusion de la règle si elle existe}}
+
+\Begin({VoirConclusion ($C$,$R$)}){
+
+\While{Suivant($R$) $\neq$ indéfini}{
+	\Assign{$R$}{Suivant($R$)}	
+}
+\If{Conclusion(Rule)=1}{
+	\Assign{$P$}{Fait($R$)}
+}
+\Else{
+	\Assign{$P$}{indéfini}  
+}
+}
+
+\caption{VoirConclusion\label{VC}}
+
+\end{algorithm}
+
+
+\section{Base de Connaissances}
+
+\section{Moteur d'Inférence}
+\end{document}
