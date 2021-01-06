@@ -13,6 +13,7 @@
 \usepackage{amsfonts}
 \usepackage{slantsc}
 \usepackage{xcolor}
+\usepackage{graphicx}
 \usepackage[a4paper, margin=1in]{geometry}
 
 \usepackage{hyperref}
@@ -64,10 +65,12 @@ Louis Esteban
 \begin{abstract}
 	Pour notre projet de LO21 nous devions réaliser un système expert composé de bases de connaissances, de règles et d'un moteur d'inférence.\\
 	\\	
-	Les règles sont sous la forme A $\wedge$ B $\wedge$ C $\Rightarrow$ D\\
-	Avec A $\wedge$ B $\wedge$ C comme prémisse et D comme conclusion.
+	Une règle est composé d'une prémisse et d'une conclusion\\
 	\\
-	Une base de connaissances est un ensemble règle.\\
+	Les règles sont sous la forme A $\wedge$ B $\wedge$ C $\Rightarrow$ D\\
+	Avec A $\wedge$ B $\wedge$ C comme prémisse et D comme conclusion.\\
+	\\
+	Une base de connaissances est un ensemble de règles.\\
 	\\
 	Le moteur d'inférence permet de déduire des faits certains en partant de la base de faits et en appliquant les règles de la base de connaissances
 \end{abstract}
@@ -85,8 +88,11 @@ Louis Esteban
 \section{Choix de conception}
 Pour réaliser notre projet nous avons décidé de créer une structure pour les règles, une structure pour les bases de connaissances ainsi qu'une structure pour le moteur d'inférence.\\
 \\
-Nous avons séparé le projet en 3 fichiers .c et 3 fichiers .h, chacun correspondant au programme et à la librairie associé de respectivement les règles, les bases de connaissances et le moteur d'inférence.
+Nous avons séparé le projet en 3 fichiers .c et 3 fichiers .h, chacun correspondant au programme et à la librairie associé de respectivement les règles, les bases de connaissances et le moteur d'inférence.\\
 \\
+Les structures des base de faits et des règles se présentent sous la forme ci-dessous:\\
+\\
+\includegraphics[width=16cm,height=114mm]{Explication.png} 
 
 \section{Choix d'implémentation}
 
@@ -219,7 +225,7 @@ L'algorithme ci-dessous permet de vérifier si une règle contient une prémisse
 	
 }
 
-\If{ \Et (Conlusion($R$)=0) (ComparerCaractère(Fact($R$),$P$)=0)}{
+\If{  (Conlusion($R$)=0) \Et (ComparerCaractère(Fact($R$),$P$)=0)}{
 
 	\Assign{Résultat}{Vrai}
 	
@@ -262,7 +268,7 @@ L'algorithme ci-dessous permet de supprimer une prémisse d'une règle, il retou
 	
 	\Assign{$T$}{$R$}\\
 	
-	\If{\Et(ComparerCaractère(Fait($R$),$P$)=1) (Conclusion($R$)=1)}{
+	\If{(ComparerCaractère(Fait($R$),$P$)=1) \Et (Conclusion($R$)=1)}{
 	
 		\Assign{Suivant($T$)}{Suivant($R$)}\\
 		Libérer($R$)\\
@@ -450,14 +456,138 @@ L'algorithme ci-dessous permet d'afficher la première règle d'une base de conn
 \section{Moteur d'Inférence}
 
 \subsection{Moteur d'Inférence}
-L'algorithme ci-dessous retourne une liste chaînée des prémisses vraies.\\
+L'algorithme ci-dessous retourne une liste chaînée des faits vrais.\\
 \\
+\begin{algorithm}[H]
+
+\Vars{\\
+-\Arg{$LF$}{Liste de Faits}\\
+-\Arg{$BC$}{Base connaissances}\\
+-\Arg{$KB$}{Base de connaissances transitoire}\\
+-\Arg{$PF$}{Liste de faits transitoires}\\
+-\Arg{$RF$}{Liste de faits transitoire}\\
+}
+\Data{\Arg{$LF$}{Liste de faits}}
+\Result{\Arg{$R$}{Règle}}
+
+\Begin({MoteurInférence($BC$,$LF$)}){
+	
+	\While{$PF$ $\neq$ indéfini}{
+	\textit{AjouterFaitsListe($PF$,$F$)}\\
+	\Assign{$PF$}{Suivant($PF$)}
+	}
+	
+	\While{$KB$ $\neq$ indéfini}{
+	\If{\textit{RègleVraie(Règle($KB$),$RF$)}=Vrai}{
+	\textit{AjouterFaitsListe(VoirConclusion(Rule($KB$),$RF$)}
+	}
+	\Assign{$KB$}{Suivant($KB$)}
+	}
+	Retourner $RF$\\
+}
+
+\caption{MoteurInférence\label{MI}}
+
+\end{algorithm}
+
+\newpage
+
 \subsection{Règle Vraie}
 L'algorithme ci-dessous permet de savoir si une règle est vraie. Il retourne indéfini si la règle est fausse et la conclusion si la règle est vraie\\
 \\
+\begin{algorithm}[H]
+
+\Vars{\\
+-\Arg{$LF$}{Une liste de faits}\\
+-\Arg{$R$}{Une règle}}
+\Data{\Arg{$LF$}{Une liste de faits}\Arg{$R$}{Une règle}}
+\Result{\Arg{$Resultat$}{Un fait}}
+
+\Begin({RègleVraie($BC$)}){
+
+	\If{(\textit{PrémisseVide($R$)} = Faux) \Et (\textit{VoirConclusion($R$)} $\neq$ indéfini) }{
+	
+	\While{Suivant($R$) $\neq$ indéfini}{
+	\If{\textit{PrémisseVraie(Fait($R$),$LF$)}=Faux}{
+	Retourner indéfini\\
+	}
+	\Assign{$R$}{Suivant($R$)}
+	}
+	Retourner Fait($R$)\\
+}\Else {
+	Retourner indéfini\\
+	}
+}
+\caption{RègleVraie\label{RV}}
+
+\end{algorithm}
+
+\newpage
+
 \subsection{Prémisse Vraie}
 L'algorithme ci-dessous permet de tester si une prémisse est vraie. Il retourne vrai si la prémisse est vraie et faux si la prémisse est fausse.\\
 \\
+\begin{algorithm}[H]
+
+\Vars{\\
+-\Arg{$LF$}{La liste de faits}\\
+-\Arg{$F$}{Un fait}}
+
+\Data{\Arg{$LF$}{Liste de faits}}
+
+\Result{\Arg{$Resultat$}{Boléen}}
+
+\Begin({PrémisseVraie($F$,$LF$)}){
+
+	\While{Suivant($LF$) $\neq$ indéfini}{
+	\If{ComparerCaractère(Fait($LF$),$F$)=0}{
+	Retourner Vrai\\
+	}
+	\Assign{$LF$}{Suivant($LF$)}
+	}
+	\If{ComparerCaractère(Fait($LF$),$F$)=0}{
+	Retourner Vrai\\
+	}
+	\Else {
+	Retourner Faux\\
+	}
+}
+
+\caption{PrémisseVraie\label{PV}}
+
+\end{algorithm}
+
+\subsection{Ajouter un fait à une liste}
+L'algorithme ci-dessous\\
+\\
+\begin{algorithm}[H]
+
+\Vars{\Arg{$BC$}{La base de connaissances en question}}
+
+\Result{\Arg{$R$}{Règle}}
+
+\Begin({PremièreRègle($BC$)}){
+
+	\If{Suivant($BC$) = indéfini}{
+	
+	Retourner indéfini\\
+	}\Else {
+	Retourner Règle(Suivant($BC$))\\
+	}
+}
+
+\caption{PremièreRègle\label{PR}}
+
+\end{algorithm}
+
+\newpage
+
+\part{Jeux d'essais}
+
+\newpage
+
+\includegraphics[width=16cm,height=114mm]{JeuEssai1.png} 
+
 \newpage
 
 \part{Commentaires sur les résultats}
