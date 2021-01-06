@@ -31,9 +31,21 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="main.c">
+		<Unit filename="../src/ie.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../src/ie.h" />
+		<Unit filename="../src/kb.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../src/kb.h" />
+		<Unit filename="../src/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../src/rule.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../src/rule.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
