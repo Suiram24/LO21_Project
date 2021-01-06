@@ -1,4 +1,7 @@
-\documentclass{article}
+\documentclass[12pt]{article}
+
+\setlength{\parskip}{1em}
+
 \usepackage[frenchb]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{times}
@@ -11,6 +14,22 @@
 \usepackage{slantsc}
 \usepackage{xcolor}
 \usepackage[a4paper, margin=1in]{geometry}
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  pdftitle={LO21 Projet: BOZANE ESTEBAN}
+}
+
+\usepackage{listings}
+\lstset{
+  numbers=left,
+  columns=fullflexible,
+  language=C,
+  numberstyle=\scriptsize,
+}
 
 \usepackage[linesnumbered, french]{algorithm2e}
 \SetKwInput{Data}{Donn\'ees}
@@ -43,20 +62,50 @@ Louis Esteban
 \maketitle
 
 \begin{abstract}
-	Pour notre projet de LO21 nous devions réaliser un système expert composé de bases de 	connaissances, de règles et d'un moteur d'inférence.
+	Pour notre projet de LO21 nous devions réaliser un système expert composé de bases de connaissances, de règles et d'un moteur d'inférence.\\
+	\\	
+	Les règles sont sous la forme A $\wedge$ B $\wedge$ C $\Rightarrow$ D\\
+	Avec A $\wedge$ B $\wedge$ C comme prémisse et D comme conclusion.
+	\\
+	Une base de connaissances est un ensemble règle.\\
+	\\
+	Le moteur d'inférence permet de déduire des faits certains en partant de la base de faits et en appliquant les règles de la base de connaissances
 \end{abstract}
+
+\newpage
+\tableofcontents
+\newpage
+
+\newpage
+
+\part{Choix de conception et d'implémentation}
+
+\newpage
+
+\section{Choix de conception}
+Pour réaliser notre projet nous avons décidé de créer une structure pour les règles, une structure pour les bases de connaissances ainsi qu'une structure pour le moteur d'inférence.\\
+\\
+Nous avons séparé le projet en 3 fichiers .c et 3 fichiers .h, chacun correspondant au programme et à la librairie associé de respectivement les règles, les bases de connaissances et le moteur d'inférence.
+\\
+
+\section{Choix d'implémentation}
+
+\newpage
+
+\part{Algorithmes}
 
 \newpage
 
 \section{Règles}
 
-\subsection{Création de règle}
-On commmence par créer une nouvelle règle de type pointeur\\
+\subsection{Nouvelle Règle}
+L'algorithme ci-dessous permet de créer une règle vide et de retourner son pointeur.\\ 
+\\
 \begin{algorithm}[H]
 
 \Vars{\Arg{$R$}{La nouvelle Règle}}
 
-\Result{\Arg{$R$}{La Règle à retourner}}
+\Result{\Arg{$R$}{Règle}}
 
 \Begin({RègleVide()}){
 	\Assign{$R$}{\textit{règle\_vide}}
@@ -66,7 +115,8 @@ On commmence par créer une nouvelle règle de type pointeur\\
 \end{algorithm}
 
 \subsection{Ajout de Prémisses}
-
+L'algorithme ci-dessous permet d'ajouter une prémisse à une règle.\\
+\\
 \begin{algorithm}[H]
 
 \Vars{\\
@@ -80,7 +130,7 @@ On commmence par créer une nouvelle règle de type pointeur\\
 
 \Result{\Arg{$R$}{Règle}}
 
-\Begin({CréerConclusion ($C$,$R$)}){
+\Begin({AjoutPrémisse ($C$,$R$)}){
 
 \While{Suivant($R$) $\neq$ indéfini}{
 	
@@ -103,8 +153,11 @@ On commmence par créer une nouvelle règle de type pointeur\\
 
 \end{algorithm}
 
-\subsection{Créer une conclusion}
+\newpage
 
+\subsection{Créer une conclusion}
+L'algorithme ci-dessous permet d'ajouter une conclusion à une règle.\\
+\\
 \begin{algorithm}[H]
 \Vars{\\
 
@@ -113,7 +166,7 @@ On commmence par créer une nouvelle règle de type pointeur\\
 - \Arg{$R'$}{Règle de transit}}
 
 \Data{\Arg{$R$}{Règle}}
-\Result{\Arg{$R$}{La règle auquelle on veut rajouter une conclusion}}
+\Result{\Arg{$R$}{Règle}}
 
 \Begin({CréerConclusion ($C$,$R$)}){
 
@@ -139,15 +192,18 @@ On commmence par créer une nouvelle règle de type pointeur\\
 
 \end{algorithm}
 
-\subsection{Test 1: Une prémisse appartient à une règle}
+\newpage
 
+\subsection{Test 1: Une prémisse appartient à une règle}
+L'algorithme ci-dessous permet de vérifier si une règle contient une prémisse ou non, il retourne vrai si la prémisse a été trouvée et il retourne faux si cette prémisse n'est pas contenue dans la règle.\\
+\\ 
 \begin{algorithm}[H]
 
 \Vars{\\
 - \Arg{$R$}{Règle}\\
 - \Arg{$P$}{Prémisse que l'on veut tester}}
 \Data{\Arg{$R$}{Règle}}
-\Result{\Arg{$R$}{Règle}}
+\Result{\Arg{$Resultat$}{Boléen}}
 
 \Begin({TestPrémisse ($P$,$R$)}){
 
@@ -177,8 +233,11 @@ On commmence par créer une nouvelle règle de type pointeur\\
 
 \end{algorithm}
 
-\subsection{Supprimer une prémisse d'une règle}
+\newpage
 
+\subsection{Supprimer une prémisse d'une règle}
+L'algorithme ci-dessous permet de supprimer une prémisse d'une règle, il retourne Vrai si l'opération a pu être réalisé et retourne faux s'il n'a pas pu trouver la prémisse en question.\\
+\\
 \begin{algorithm}[H]
 
 \Vars{\\
@@ -189,7 +248,7 @@ On commmence par créer une nouvelle règle de type pointeur\\
 
 \Data{\Arg{$R$}{Règle}}
 
-\Result{\Arg{$R$}{Règle}}
+\Result{\Arg{$Resultat$}{Boléen}}
 
 \Begin({SupprimerPrémisse ($P$,$R$)}){
 
@@ -222,13 +281,16 @@ On commmence par créer une nouvelle règle de type pointeur\\
 
 \end{algorithm}
 
-\subsection{Test 2: Prémisse vide d'une règle}
+\newpage
 
+\subsection{Test 2: Prémisse vide d'une règle}
+L'algorithme ci-dessous test si une règle contient des prémisses ou non. Il retourne Vrai si la règle ne contient pas de prémisses (elle peut tout de même contenir une conclusion) et retourne faux si elle contient des prémisses.\\
+\\
 \begin{algorithm}[H]
 
 \Vars{\Arg{$R$}{Règle que l'on veut tester}}
-\Data{\Arg{$R$}{la Règle en question}}
-\Result{\Arg{Résultat}{Précise si la règle contient des prémisses ou non}}
+\Data{\Arg{$R$}{Règle}}
+\Result{\Arg{$Resultat$}{Boléen}}
 
 \Begin({PrémisseVide ($R$)}){
 
@@ -249,12 +311,13 @@ On commmence par créer une nouvelle règle de type pointeur\\
 \end{algorithm}
 
 \subsection{Accéder à la première prémisse d'une règle}
-
+L'algorithme ci-dessous permet de connaître la première prémisse d'une règle (si celle ci en contient bien sûr). Ce dernier retourne un pointeur lié à la première prémisse de la règle.\\
+\\
 \begin{algorithm}[H]
 
 \Vars{\Arg{$R$}{Règle dont on veut voir la prémisse}}
-\Data{\Arg{$R$}{la Règle en question}}
-\Result{\Arg{$P$}{Renvoit la première prémisse}}
+\Data{\Arg{$R$}{Règle}}
+\Result{\Arg{$P$}{Prémisse}}
 
 \Begin({PremièrePrémisse ($R$)}){
 
@@ -273,15 +336,18 @@ On commmence par créer une nouvelle règle de type pointeur\\
 
 \end{algorithm}
 
-\subsection{Accéder à la conclusion d'une règle}
+\newpage
 
+\subsection{Accéder à la conclusion d'une règle}
+L'algorithme ci-dessous permet de connaître la conclusion d'une règle (si celle ci existe bien sûr). Ce dernier retourne un pointeur lié à la conclusion de la règle.\\
+\\
 \begin{algorithm}[H]
 
 \Vars{\Arg{$R$}{Règle dont on veut la conclusion}}
 
-\Data{\Arg{$R$}{la Règle en question}}
+\Data{\Arg{$R$}{Règle}}
 
-\Result{\Arg{$P$}{La Conclusion de la règle si elle existe}}
+\Result{\Arg{$P$}{Prémisse}}
 
 \Begin({VoirConclusion ($C$,$R$)}){
 
@@ -300,8 +366,102 @@ On commmence par créer une nouvelle règle de type pointeur\\
 
 \end{algorithm}
 
+\newpage
 
 \section{Base de Connaissances}
 
+\subsection{Nouvelle Base de Connaissances}
+L'algorithme ci-dessous permet de créer une base de connaissances vide. Il retourne le pointeur lié à cette base de connaissances.\\
+\\
+\begin{algorithm}[H]
+
+\Vars{\Arg{$BC$}{La nouvelle Base de Connaissances}}
+
+\Result{\Arg{$BC$}{Base de Connaissances}}
+
+\Begin({BC\_Vide()}){
+	\Assign{$BC$}{\textit{BC\_vide}}
+}
+
+\caption{BC\_Vide\label{BC}}
+
+\end{algorithm}
+
+\subsection{Ajouter une nouvelle règle}
+L'algorithme ci-dessous permet d'ajouter à une base de connaissances existante une nouvelle règle. Il retourne vrai si l'opération s'est déroulé avec succès.\\
+\\
+\begin{algorithm}[H]
+
+\Vars{\\
+- \Arg{$R$}{Règle à rajouter}\\
+- \Arg{$BC$}{Base dont on veut rajouter une règle}\\
+- \Arg{$NR$}{Nouvelle règle}\\}
+
+\Data{\Arg{$BC$}{Base de Connaissances}}
+
+\Result{\Arg{$Resultat$}{Boléen}}
+
+\Begin({AjoutRègle ($R$,$BC$)}){
+
+\Assign{$NR$}{\textit{BC\_Vide()}}\\
+
+\While{Suivant($BC$) $\neq$ indéfini}{
+	
+	\Assign{$BC$}{Suivant($BC$)}
+}
+
+\Assign{Suivant($BC$)}{$NR$}\\
+\Assign{Règle($NR$)}{$R$}\\
+Retourner Vrai
+
+}
+
+\caption{AjoutRègle\label{AR}}
+
+\end{algorithm}
+
+\newpage
+
+\subsection{Afficher la première règle}
+L'algorithme ci-dessous permet d'afficher la première règle d'une base de connaissance. Il retourne le pointeur lié à la première règle de la base (si celle-ci existe).\\
+\\
+\begin{algorithm}[H]
+
+\Vars{\Arg{$BC$}{La base de connaissances en question}}
+
+\Result{\Arg{$R$}{Règle}}
+
+\Begin({PremièreRègle($BC$)}){
+
+	\If{Suivant($BC$) = indéfini}{
+	
+	Retourner indéfini\\
+	}\Else {
+	Retourner Règle(Suivant($BC$))\\
+	}
+}
+
+\caption{PremièreRègle\label{PR}}
+
+\end{algorithm}
+
+\newpage
+
 \section{Moteur d'Inférence}
+
+\subsection{Moteur d'Inférence}
+L'algorithme ci-dessous retourne une liste chaînée des prémisses vraies.\\
+\\
+\subsection{Règle Vraie}
+L'algorithme ci-dessous permet de savoir si une règle est vraie. Il retourne indéfini si la règle est fausse et la conclusion si la règle est vraie\\
+\\
+\subsection{Prémisse Vraie}
+L'algorithme ci-dessous permet de tester si une prémisse est vraie. Il retourne vrai si la prémisse est vraie et faux si la prémisse est fausse.\\
+\\
+\newpage
+
+\part{Commentaires sur les résultats}
+
+\newpage
+
 \end{document}
